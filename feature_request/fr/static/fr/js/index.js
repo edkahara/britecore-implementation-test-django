@@ -67,7 +67,6 @@ $(document).ready(function(){
   $('.viewButton').click(function() {
     var requestId = $(this).data("edit");
     $.get("/" + requestId, function(data) {
-      console.log(data);
       $('.card-title h4').text(data[0].fields.title);
       $('.card-content p').text(data[0].fields.description);
     });

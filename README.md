@@ -59,6 +59,12 @@ greater than on equal to the new or updated request's priority by one.
 
   `manage.py loaddata clients.json products.json`
 
+### Test the application
+
+  `coverage run --source='.' manage.py test myapp`
+
+  `coverage report` to get the test coverage.
+
 ### Run the application
 
   `python manage.py runserver`
@@ -70,7 +76,7 @@ greater than on equal to the new or updated request's priority by one.
 * Ubuntu 18.04
 * Python 3.6.7
 * SQLite 3
-* Django
+* Django 2.2
 * jQuery
 * Materialize CSS
 
