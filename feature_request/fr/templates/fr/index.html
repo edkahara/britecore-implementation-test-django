@@ -1,0 +1,169 @@
+{% extends "fr/layout.html" %}
+{% block main_content %}
+{% load static %}
+<!--navbar-->
+<nav>
+  <div class="nav-wrapper white">
+    <a href="/"><img src="{% static 'fr/img/logo.png' %}" alt="logo"></a>
+    <a href="/" class="brand-logo grey-text text-darken-2"><small>Feature Request</small></a>
+    <a href="#" data-target="mobileDemo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+    <ul class="right hide-on-med-and-down">
+      <li><a data-target="addModal" class="btn-small modal-trigger blue" id="button">New Feature Request</a></li>
+    </ul>
+  </div>
+</nav>
+
+<ul class="sidenav" id="mobileDemo">
+  <li><a data-target="addModal" class="btn-small modal-trigger blue" id="button">New Feature Request</a></li>
+</ul>
+
+<!--table-->
+<div>
+  {% if requests %}
+    {% for client, client_requests in nested_requests.items %}
+      <ul class="collapsible expandable">
+        <li class="active">
+          <div class="collapsible-header">
+            <h6><b>{{ client }}</b></h6>
+          </div>
+          <div class="collapsible-body white">
+            <table>
+              <thead>
+                <tr class="responsive-table">
+                  <th>Title</th>
+                  <th>Priority</th>
+                  <th>Product Area</th>
+                  <th>Target Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tbody>
+                  {% for request in client_requests %}
+                    <tr>
+                      <td class="black-text">{{ request.title }}</td>
+                      <td class="black-text">{{ request.priority }}</td>
+                      <td class="black-text">{{ request.product }}</td>
+                      <td class="black-text">{{ request.targetDate|date:"b d, Y" }}</td>
+                      <td>
+                        <a href="#" data-edit="{{ request.id }}" data-target="description-modal" class="modal-trigger viewButton">View</a> |
+                        <a href="#" data-edit="{{ request.id }}" data-target="editModal" class="modal-trigger editButton">Edit</a> |
+                        <a href="delete/{{ request.id }}/">Delete</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </tbody>
+            </table>
+          </div>
+        </li>
+      </ul>
+    {% endfor %}
+  {% else %}
+    <h4 class="center">no feature requests</h4>
+  {% endif %}
+</div>
+
+<!--view modal-->
+<div class="modal" id="description-modal">
+  <div class="card">
+    <div class="card-title center-align"><h4></h4></div>
+    <div class="card-content"><p></p></div>
+  </div>
+</div>
+
+<!--add modal-->
+<div class="modal" id="addModal">
+  <form action="create/" method="POST" class="white requestForm" id="addForm">
+    {% csrf_token %}
+    <div class="container">
+      <h4 class="grey-text text-darken-3 center">Create Feature Request</h4>
+      <div class="input-field">
+        <input type="text" name="title" class="title" data-length="50" />
+        <label for="title">Title</label>
+      </div>
+      <div class="input-field">
+        <textarea class="materialize-textarea" name="description"></textarea>
+        <label for="description">Description</label>
+      </div>
+      <div>
+        <label for="clientName">Client Name</label>
+        <select class="browser-default" name="client">
+          <option value="" disabled selected>choose a client</option>
+          {% for client in clients %}
+            <option value="{{ client.id }}">{{ client.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="input-field">
+        <input type="number" min="1" onkeydown="return false" name="priority" />
+        <label for="clientPriority">Client Priority</label>
+      </div>
+      <div>
+        <label for="productArea">Product Area</label>
+        <select class="browser-default" name="product">
+          <option value="" disabled selected>choose a product area</option>
+          {% for product in products %}
+            <option value="{{ product.id }}">{{ product.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="input-field">
+        <input type="text" class="datepicker" onkeydown="return false" name="targetDate" placeholder="Click to open calender" />
+        <label for="date">Target Date</label>
+      </div>
+      <div class="input-field center-align">
+        <input type="submit" class="btn green" id="button" value="Create Feature Request" />
+      </div>
+    </div>
+  </form>
+</div>
+
+<!--edit modal-->
+<div class="modal" id="editModal">
+  <form method="POST" class="white requestForm" id="editForm">
+    {% csrf_token %}
+    <div class="container">
+      <h4 class="grey-text text-darken-3 center">Update Feature Request</h4>
+      <div class="input-field">
+        <input type="text" name="title" id="title" class="title" data-length="50" />
+        <label for="title">Title</label>
+      </div>
+      <div class="input-field">
+        <textarea class="materialize-textarea" name="description" id="description"></textarea>
+        <label for="description">Description</label>
+      </div>
+      <div>
+        <label for="clientName">Client Name</label>
+        <select class="browser-default" name="client" id="client">
+          <option value="" disabled>choose a client</option>
+          {% for client in clients %}
+            <option value="{{ client.id }}">{{ client.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="input-field">
+        <input type="number" min="1" onkeydown="return false" name="priority" id="priority" />
+        <label for="clientPriority">Client Priority</label>
+      </div>
+      <div>
+        <label for="productArea">Product Area</label>
+        <select class="browser-default" name="product" id="product">
+          <option value="" disabled>choose a product area</option>
+          {% for product in products %}
+            <option value="{{ product.id }}">{{ product.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="input-field">
+        <input type="text" class="datepicker" onkeydown="return false" name="targetDate" id="targetDate" />
+        <label for="targetDate">Target Date</label>
+      </div>
+      <div class="input-field center-align">
+        <input type="submit" class="btn green" id="button" value="Update Feature Request" />
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

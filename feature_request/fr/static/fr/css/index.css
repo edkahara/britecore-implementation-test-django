@@ -1,0 +1,19 @@
+nav, #button, .card, .collapsible {
+  box-shadow :0px 0px 0px 0px;
+}
+ul.collapsible li {
+  border: 1px solid #BAB3B3;
+  margin: 1px;
+}
+div.error {
+  color: #ff4081;
+}
+.brand-logo, h6 {
+  font-family: Mina;
+}
+.material-icons {
+  color: black;
+}
+p {
+  font-size: 20px;
+}
